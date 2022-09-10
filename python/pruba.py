@@ -1,5 +1,5 @@
-############################# NO TOCAR ESTE CÓDIGO ############################
 from random import randint
+from signal import siginterrupt
 
 def sacar_carta():
     '''
@@ -21,7 +21,13 @@ def sacar_carta():
 
 ########################### AQUÍ COMIENZA TU CÓDGIO ###########################
 
-jugar = input("¿Quiere jugar a Easy21? ")
+print("¿Quiere jugar a Easy21?")
+jugar = input()
+
+dinero = 500 
+while jugar == 'no'or jugar== "No": 
+    print('Gracias igual')
+    break
 
 while jugar == "Si" or jugar == "si":
 
@@ -31,16 +37,15 @@ while jugar == "Si" or jugar == "si":
     cartasacada = [sacar_carta()]
 
     print(f'El groupier saca un {cartasacada[0]}')
-    print(f'Por el momento sacó las cartas {cartasacada}')
+    print(f'Por el momento el groupier sacó las cartas {cartasacada}')
 
-    dinero = 500 
     print(f'Su dinero es ${dinero}')
 
     apuesta = input("¿Quieres apostar?: ")
 
     if apuesta == "Si" or apuesta == "si":
         apostar = int(input("¿Cuánto desea apostar?: "))
-        if apostar >500:
+        if apostar > dinero:
             print("No tiene el dinero suficiente")
         else: 
             print("Su apuesta ha sido aceptada")
@@ -49,6 +54,7 @@ while jugar == "Si" or jugar == "si":
             print ("Usted no ha apostado")
     else: 
         print("Ingrese un valor válido")
+        jugar == "no"
 
 ############### TURNO DEL JUGADOR #################
 
@@ -58,15 +64,80 @@ while jugar == "Si" or jugar == "si":
     print("¿Desea sacar otra carta?")
     turnojugador = input()
 
-    while turnojugador == "Si" or turnojugador == "si" and sum(carta_jugador) <= 21:
+    while (turnojugador == "Si" or turnojugador == "si") and sum(carta_jugador) <= 21:
         carta_jugador += [sacar_carta()]
         print(f"Saco un {carta_jugador[-1]}, su total es {sum(carta_jugador)}")
         print(f"Por el momento sacó las cartas {carta_jugador}")
         if sum(carta_jugador) > 21:
             print("La suma de sus cartas superó 21, el croupier gana")
+            print("¿Quiere jugar de vuelta?")
+            jugar = input()
             if apuesta == "Si" or apuesta == "si":
                 dinero = dinero - apostar 
                 print(f"Ha perdido su dinero apostado, le quedan $ {dinero}")
         else: 
             print("¿Desea sacar otra carta?")
-            otra_carta = input()
+            turnojugador = input()
+    
+############## TURNO DEL GRUPIER ##############
+
+    cartasacada += [sacar_carta()]
+    print(f"El crupier saca un {cartasacada[-1]}, su total es {sum(cartasacada)}")
+    print (f'Por el momento sacó las cartas: {cartasacada}')
+
+    while sum(cartasacada) < 16: 
+        print("El croupier pide otra carta")
+        cartasacada += [sacar_carta()]
+        print(f"El crupier saca un {cartasacada[-1]}, su total es {sum(cartasacada)}")
+    
+    if sum(cartasacada) > 21: 
+        print("La suma de las cartas del crupier superó 21, ¡usted gana!")
+        dinero = dinero + apostar
+        print(f"Le quedan $ {dinero}")
+    else: 
+        if sum(cartasacada) >= sum(carta_jugador):
+            print("La partida termina, el crupier gana")
+            dinero = dinero - apostar
+            print(f"Le quedan $ {dinero}")
+        else:
+            print("La partida termina, usted gana")
+            dinero = dinero + apostar 
+            print(f"Le quedan $ {dinero}")
+
+    if dinero <= 0:
+        print("Se quedó sin dinero, no puede jugar")
+        jugar = "no"
+    else:
+        print("¿Quiere jugar de vuelta?")
+        jugar = input()
+        if jugar == 'si' or jugar == 'Si':
+            print("Bienvenid@ a la mesa de Easy 21")
+            print("Empieza la partida")
+
+            cartasacada = [sacar_carta()]
+
+            print(f'El groupier saca un {cartasacada[0]}')
+            print(f'Por el momento el groupier sacó las cartas {cartasacada}')
+
+            print(f'Su dinero es ${dinero}')
+
+            apuesta = input("¿Quieres apostar?: ")
+
+            if apuesta == "Si" or apuesta == "si":
+                apostar = int(input("¿Cuánto desea apostar?: "))
+                if apostar > dinero:
+                    print("No tiene el dinero suficiente, elija un monto más chico")
+                    apostar = int(input("¿Cuánto desea apostar?: "))
+                else: 
+                    print("Su apuesta ha sido aceptada")
+                    print(f'Ha apostado ${apostar}')
+            elif apuesta == "No" or apuesta == "no":
+                print ("Usted no ha apostado")
+            else: 
+                print("Ingrese un valor válido")
+                jugar == "no"
+            
+
+    while jugar == "no" or jugar == "No":
+        print("Gracias por jugar Easy21")
+        break
