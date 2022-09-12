@@ -20,7 +20,7 @@ dinero = 500
 while jugar == 'no'or jugar== "No": 
     print('Gracias igual')
     break
-
+ 
 while jugar == "Si" or jugar == "si":
 
     print("Bienvenid@ a la mesa de Easy 21")
@@ -39,6 +39,7 @@ while jugar == "Si" or jugar == "si":
         apostar = int(input("¿Cuánto desea apostar?: "))
         if apostar > dinero:
             print("No tiene el dinero suficiente")
+            break 
         else: 
             print("Su apuesta ha sido aceptada")
             print(f'Ha apostado ${apostar}')
